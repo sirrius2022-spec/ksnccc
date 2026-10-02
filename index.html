@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth bg-black text-white">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김성남힐링캠핑포털 | Kim Seong-nam Healing Camping Portal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Pre-loaded Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            nv: {
+              green: '#76b900',
+              hover: '#88d400',
+              darkgreen: '#1a3300',
+              bg: '#000000',
+              card: '#111111',
+              subcard: '#181818',
+              border: '#2a2a2a',
+              textmuted: '#8e8e8e',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', '"Noto Sans KR"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* NVIDIA Signature Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #000000;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2a2a2a;
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #76b900;
+    }
+
+    .nv-glow {
+      box-shadow: 0 0 35px -5px rgba(118, 185, 0, 0.35);
+    }
+    .nv-glow-sm {
+      box-shadow: 0 0 15px rgba(118, 185, 0, 0.2);
+    }
+    .nv-border-glow:hover {
+      border-color: #76b900;
+      box-shadow: 0 0 20px -3px rgba(118, 185, 0, 0.3);
+    }
+    .nv-nav-blur {
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+  </style>
+</head>
+<body class="bg-black text-neutral-100 font-sans selection:bg-[#76b900] selection:text-black antialiased">
+
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none bg-neutral-900 border-l-4 border-l-[#76b900] border-y border-r border-neutral-800 text-white px-5 py-3.5 shadow-2xl flex items-center gap-3">
+    <div id="toast-icon" class="text-[#76b900] text-base">
+      <i class="fa-solid fa-circle-check"></i>
+    </div>
+    <span id="toast-message" class="text-xs sm:text-sm font-medium tracking-wide">시스템 알림 메시지</span>
+  </div>
+
+  <header class="fixed top-0 left-0 right-0 z-40 nv-nav-blur border-b border-neutral-800 transition-all duration-300" id="main-header">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between">
+      <!-- Portal Brand Logo (NVIDIA Tech Tone) -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 bg-black border border-neutral-700 flex items-center justify-center group-hover:border-[#76b900] transition">
+          <i class="fa-solid fa-mountain-sun text-[#76b900] text-lg group-hover:scale-110 transition duration-300"></i>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5">
+            <span class="font-extrabold text-base tracking-tight text-white group-hover:text-[#76b900] transition">김성남힐링캠핑포털</span>
+            <span class="px-1.5 py-0.5 text-[9px] font-bold bg-[#76b900] text-black tracking-wider uppercase rounded-xs">PORTAL</span>
+          </div>
+          <span class="text-[10px] text-neutral-400 font-mono tracking-widest uppercase">SEONGNAM KIM OUTDOOR EXPEDITION</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Menu -->
+      <nav class="hidden md:flex items-center gap-8 text-xs font-semibold tracking-wider uppercase text-neutral-300">
+        <a href="#about" class="hover:text-[#76b900] transition duration-200">캠퍼 소개</a>
+        <a href="#journals" class="hover:text-[#76b900] transition duration-200">필드 익스피디션</a>
+        <a href="#gears" class="hover:text-[#76b900] transition duration-200">기어 아키텍처</a>
+        <a href="#checklist" class="hover:text-[#76b900] transition duration-200">패킹 체크리스트</a>
+        <a href="#recipes" class="hover:text-[#76b900] transition duration-200">아웃도어 다이닝</a>
+        <a href="#guestbook" class="hover:text-[#76b900] transition duration-200">포털 방명록</a>
+      </nav>
+
+      <!-- Utility Controls -->
+      <div class="flex items-center gap-3">
+        <!-- Ambient Campfire Tech Button -->
+        <button id="ambient-sound-btn" class="px-3.5 py-2 border border-neutral-700 bg-neutral-900/90 text-neutral-200 text-xs font-semibold flex items-center gap-2 hover:border-[#76b900] hover:text-[#76b900] transition duration-200 active:scale-95">
+          <i id="sound-icon" class="fa-solid fa-volume-xmark text-neutral-400"></i>
+          <span id="sound-text" class="hidden sm:inline font-mono">ASMR OFF</span>
+        </button>
+
+        <!-- Mobile Drawer Toggle -->
+        <button id="mobile-toggle" class="md:hidden p-2 text-neutral-300 hover:text-white border border-neutral-800 bg-neutral-900">
+          <i class="fa-solid fa-bars text-base"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-neutral-800 bg-black/95 px-6 py-4 flex-col gap-3 text-xs uppercase tracking-wider font-semibold">
+      <a href="#about" class="py-2 text-neutral-300 hover:text-[#76b900] border-b border-neutral-900 mobile-link">캠퍼 소개</a>
+      <a href="#journals" class="py-2 text-neutral-300 hover:text-[#76b900] border-b border-neutral-900 mobile-link">필드 익스피디션</a>
+      <a href="#gears" class="py-2 text-neutral-300 hover:text-[#76b900] border-b border-neutral-900 mobile-link">기어 아키텍처</a>
+      <a href="#checklist" class="py-2 text-neutral-300 hover:text-[#76b900] border-b border-neutral-900 mobile-link">패킹 체크리스트</a>
+      <a href="#recipes" class="py-2 text-neutral-300 hover:text-[#76b900] border-b border-neutral-900 mobile-link">아웃도어 다이닝</a>
+      <a href="#guestbook" class="py-2 text-neutral-300 hover:text-[#76b900] mobile-link">포털 방명록</a>
+    </div>
+  </header>
+
+  <section class="relative min-h-[92vh] flex items-center justify-center pt-28 pb-20 overflow-hidden border-b border-neutral-900">
+    <!-- NVIDIA Lime/Matrix High-Tech Particle Canvas -->
+    <canvas id="nv-matrix-canvas" class="absolute inset-0 pointer-events-none z-0 opacity-45"></canvas>
+    
+    <!-- Dark Gradient Grid overlay -->
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(118,185,0,0.12),rgba(0,0,0,1))] z-0"></div>
+
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
+      <!-- Tag / Badge -->
+      <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 bg-neutral-900 border border-neutral-800 text-[11px] font-mono text-[#76b900] tracking-wider uppercase mb-8">
+        <span class="w-2 h-2 rounded-full bg-[#76b900] animate-pulse"></span>
+        <span>NEXT-GEN OUTDOOR HEALING ARCHITECTURE</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-none mb-6">
+        자연의 고요함과 테크의 결합,<br class="hidden sm:inline">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#76b900] via-[#94e300] to-white">
+          김성남 힐링 캠핑 포털
+        </span>
+      </h1>
+
+      <p class="text-neutral-400 text-sm sm:text-base max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+        도시의 일상에서 벗어나 대한민국 전역의 숲, 호수, 해변 노지에서 축적한 실전 아웃도어 익스피디션 데이터베이스와 
+        고효율 캠핑 기어 셋업을 탐색하세요.
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a href="#journals" class="px-7 py-3.5 bg-[#76b900] hover:bg-[#88d400] text-black font-extrabold text-xs tracking-wider uppercase transition duration-200 nv-glow-sm flex items-center gap-2 active:scale-95">
+          <span>익스피디션 리포트 확인</span>
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </a>
+        <a href="#checklist" class="px-7 py-3.5 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-white font-bold text-xs tracking-wider uppercase transition duration-200 flex items-center gap-2 active:scale-95">
+          <i class="fa-solid fa-microchip text-[#76b900]"></i>
+          <span>패킹 체크포인트 가동</span>
+        </a>
+      </div>
+
+      <!-- NVIDIA Style Telemetry Bar -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-16 pt-8 border-t border-neutral-900 max-w-4xl mx-auto text-left">
+        <div class="p-4 bg-neutral-950 border border-neutral-800/80">
+          <span class="block text-2xl font-black text-[#76b900] font-mono">04+ YRS</span>
+          <span class="text-[11px] text-neutral-400 font-medium">캠핑 및 필드 익스피디션 경력</span>
+        </div>
+        <div class="p-4 bg-neutral-950 border border-neutral-800/80">
+          <span class="block text-2xl font-black text-white font-mono">42 SITES</span>
+          <span class="text-[11px] text-neutral-400 font-medium">누적 출정 및 힐링 필드 로그</span>
+        </div>
+        <div class="p-4 bg-neutral-950 border border-neutral-800/80">
+          <span class="block text-2xl font-black text-[#76b900] font-mono">100% LNT</span>
+          <span class="text-[11px] text-neutral-400 font-medium">클린 캠핑 및 자연 보존 원칙</span>
+        </div>
+        <div class="p-4 bg-neutral-950 border border-neutral-800/80">
+          <span class="block text-2xl font-black text-white font-mono">35+ SPECS</span>
+          <span class="text-[11px] text-neutral-400 font-medium">실전 벤치마크 완료 캠핑 기어</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="py-20 bg-neutral-950 border-b border-neutral-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <!-- Profile Identity Card -->
+        <div class="lg:col-span-5 flex flex-col items-center text-center">
+          <div class="relative p-1 bg-gradient-to-b from-[#76b900] to-neutral-900">
+            <div class="w-56 h-56 bg-black flex flex-col items-center justify-center p-6 border border-neutral-800">
+              <div class="w-20 h-20 bg-neutral-900 border border-[#76b900] flex items-center justify-center text-3xl text-[#76b900] mb-4">
+                <i class="fa-solid fa-user-astronaut"></i>
+              </div>
+              <span class="font-bold text-lg text-white">김성남 (Seongnam Kim)</span>
+              <span class="text-xs text-[#76b900] font-mono mt-1">Chief Expedition Officer</span>
+            </div>
+            <span class="absolute top-3 right-3 px-2 py-0.5 bg-[#76b900] text-black text-[10px] font-black uppercase tracking-wider">
+              VERIFIED
+            </span>
+          </div>
+
+          <div class="flex flex-wrap justify-center gap-2 mt-5 text-[11px] font-mono text-neutral-300">
+            <span class="px-2.5 py-1 bg-neutral-900 border border-neutral-800">#AUTOCAMPING</span>
+            <span class="px-2.5 py-1 bg-neutral-900 border border-neutral-800">#SOLO_BACKPACKING</span>
+            <span class="px-2.5 py-1 bg-neutral-900 border border-neutral-800">#LNT_PIONEER</span>
+          </div>
+        </div>
+
+        <!-- Philosophy Specs -->
+        <div class="lg:col-span-7">
+          <div class="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest text-[#76b900] font-bold mb-3">
+            <i class="fa-solid fa-terminal"></i> OPERATIONAL PHILOSOPHY
+          </div>
+          <h2 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-6">
+            "완벽한 장비 최적화와<br>
+            자연과 온전하게 공명하는 슬로우 힐링."
+          </h2>
+          <p class="text-neutral-400 text-sm leading-relaxed mb-6 font-light">
+            김성남 힐링 캠핑 포털은 자연의 경이로움 속에서 복잡한 일상의 번아웃을 비우고, 
+            가장 최적화된 기어 셋업과 안전한 매뉴얼을 기반으로 완벽한 재충전을 이뤄내는 프리미엄 아웃도어 아카이브입니다.
+            LNT (Leave No Trace) 7대 원칙을 철저히 준수하며 지속 가능한 힐링 캠핑 문화를 지향합니다.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="p-5 bg-black border border-neutral-800 nv-border-glow transition duration-300">
+              <div class="text-[#76b900] text-lg mb-2">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+              <h4 class="font-bold text-sm text-white mb-1">안전 & 환경 프로토콜</h4>
+              <p class="text-xs text-neutral-400 leading-relaxed">
+                모든 사이트에서 전용 방염 패드와 화로대 사용, 잔불 완전 소화 및 클린 사이트 복원 100% 실천.
+              </p>
+            </div>
+
+            <div class="p-5 bg-black border border-neutral-800 nv-border-glow transition duration-300">
+              <div class="text-[#76b900] text-lg mb-2">
+                <i class="fa-solid fa-sliders"></i>
+              </div>
+              <h4 class="font-bold text-sm text-white mb-1">필드 기어 튜닝</h4>
+              <p class="text-xs text-neutral-400 leading-relaxed">
+                계절별 기상 센서 및 내풍성 검증을 거친 하이엔드 텐트와 모듈러 퍼니처 시스템 운용.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="journals" class="py-20 bg-black border-b border-neutral-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div>
+          <div class="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest text-[#76b900] font-bold mb-2">
+            <i class="fa-solid fa-compass"></i> FIELD EXPEDITION LOGS
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">필드 익스피디션 아카이브</h2>
+          <p class="text-neutral-400 text-xs sm:text-sm mt-2">김성남 캠퍼가 직접 답사하고 기록한 주요 캠핑 사이트 정밀 분석 리포트</p>
+        </div>
+
+        <!-- Filter Buttons (NVIDIA Tab Style) -->
+        <div class="flex flex-wrap items-center gap-1.5 border border-neutral-800 p-1 bg-neutral-950" id="log-filters">
+          <button class="filter-btn active px-3.5 py-1.5 text-xs font-bold bg-[#76b900] text-black uppercase tracking-wider" data-filter="all">전체 로그</button>
+          <button class="filter-btn px-3.5 py-1.5 text-xs font-semibold text-neutral-400 hover:text-white uppercase tracking-wider" data-filter="forest">마운틴 & 포레스트</button>
+          <button class="filter-btn px-3.5 py-1.5 text-xs font-semibold text-neutral-400 hover:text-white uppercase tracking-wider" data-filter="lake">레이크사이드</button>
+          <button class="filter-btn px-3.5 py-1.5 text-xs font-semibold text-neutral-400 hover:text-white uppercase tracking-wider" data-filter="ocean">코스탈 & 노을</button>
+        </div>
+      </div>
+
+      <!-- Journal Grid (Sharp Edge NVIDIA Cards) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="journal-grid">
+        <!-- Card 1 -->
+        <article class="journal-card group bg-neutral-950 border border-neutral-800 nv-border-glow transition duration-300 flex flex-col justify-between" data-category="forest">
+          <div>
+            <div class="relative h-48 overflow-hidden bg-neutral-900 border-b border-neutral-800">
+              <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent z-10"></div>
+              <div class="absolute top-3 left-3 z-20">
+                <span class="px-2 py-0.5 bg-[#76b900] text-black font-mono text-[10px] font-black uppercase">
+                  FOREST DEEP
+                </span>
+              </div>
+              <!-- High-tech Graphic Vector -->
+              <svg class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-60" viewBox="0 0 400 240">
+                <rect width="400" height="240" fill="#0d140e"/>
+                <polygon points="50,240 200,60 350,240" fill="#132314"/>
+                <polygon points="120,240 200,100 280,240" fill="#1b361d"/>
+                <circle cx="200" cy="180" r="8" fill="#76b900"/>
+                <line x1="0" y1="239" x2="400" y2="239" stroke="#76b900" stroke-width="2"/>
+              </svg>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between text-[11px] font-mono text-neutral-500 mb-2">
+                <span><i class="fa-regular fa-calendar text-[#76b900] mr-1"></i> 2026.09.18</span>
+                <span><i class="fa-solid fa-temperature-half text-[#76b900] mr-1"></i> MIN 11°C</span>
+              </div>
+              <h3 class="text-lg font-bold text-white group-hover:text-[#76b900] transition duration-200 mb-2">
+                강원 정선 가리왕산 잣나무 숲 사이트
+              </h3>
+              <p class="text-neutral-400 text-xs leading-relaxed mb-4">
+                고도 750m 피톤치드 숲속 깊숙이 구축한 미니멀 베이스캠프. 깊은 힐링과 전자기기 디톡스에 최적화된 사이트 분석.
+              </p>
+            </div>
+          </div>
+          <div class="px-6 pb-6 pt-3 border-t border-neutral-900 flex items-center justify-between text-xs">
+            <span class="text-neutral-500 font-mono text-[11px]">GEAR: 랜드락 M</span>
+            <button onclick="openLogModal(0)" class="text-[#76b900] hover:underline font-bold text-xs flex items-center gap-1.5">
+              <span>상세 리포트</span>
+              <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            </button>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="journal-card group bg-neutral-950 border border-neutral-800 nv-border-glow transition duration-300 flex flex-col justify-between" data-category="lake">
+          <div>
+            <div class="relative h-48 overflow-hidden bg-neutral-900 border-b border-neutral-800">
+              <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent z-10"></div>
+              <div class="absolute top-3 left-3 z-20">
+                <span class="px-2 py-0.5 bg-[#76b900] text-black font-mono text-[10px] font-black uppercase">
+                  LAKESIDE VISTA
+                </span>
+              </div>
+              <svg class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-60" viewBox="0 0 400 240">
+                <rect width="400" height="240" fill="#09141f"/>
+                <path d="M0 160 Q 200 130 400 160 L400 240 L0 240 Z" fill="#0f2638"/>
+                <circle cx="280" cy="70" r="24" fill="#1e405b"/>
+                <line x1="0" y1="239" x2="400" y2="239" stroke="#76b900" stroke-width="2"/>
+              </svg>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between text-[11px] font-mono text-neutral-500 mb-2">
+                <span><i class="fa-regular fa-calendar text-[#76b900] mr-1"></i> 2026.06.12</span>
+                <span><i class="fa-solid fa-droplet text-[#76b900] mr-1"></i> HUMID 55%</span>
+              </div>
+              <h3 class="text-lg font-bold text-white group-hover:text-[#76b900] transition duration-200 mb-2">
+                충주호 물멍 & 모닥불 힐링 존
+              </h3>
+              <p class="text-neutral-400 text-xs leading-relaxed mb-4">
+                호수의 잔잔한 파동과 밤하늘 은하수가 선사하는 딥 릴랙세이션. 저소음 쿨러와 무쇠 그릴을 이용한 다이닝 기록.
+              </p>
+            </div>
+          </div>
+          <div class="px-6 pb-6 pt-3 border-t border-neutral-900 flex items-center justify-between text-xs">
+            <span class="text-neutral-500 font-mono text-[11px]">GEAR: 알파인 돔</span>
+            <button onclick="openLogModal(1)" class="text-[#76b900] hover:underline font-bold text-xs flex items-center gap-1.5">
+              <span>상세 리포트</span>
+              <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            </button>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="journal-card group bg-neutral-950 border border-neutral-800 nv-border-glow transition duration-300 flex flex-col justify-between" data-category="ocean">
+          <div>
+            <div class="relative h-48 overflow-hidden bg-neutral-900 border-b border-neutral-800">
+              <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent z-10"></div>
+              <div class="absolute top-3 left-3 z-20">
+                <span class="px-2 py-0.5 bg-[#76b900] text-black font-mono text-[10px] font-black uppercase">
+                  COASTAL SUNSET
+                </span>
+              </div>
+              <svg class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-60" viewBox="0 0 400 240">
+                <rect width="400" height="240" fill="#1a1208"/>
+                <circle cx="200" cy="140" r="50" fill="#4d2f09"/>
+                <rect y="170" width="400" height="70" fill="#120c06"/>
+                <line x1="0" y1="239" x2="400" y2="239" stroke="#76b900" stroke-width="2"/>
+              </svg>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between text-[11px] font-mono text-neutral-500 mb-2">
+                <span><i class="fa-regular fa-calendar text-[#76b900] mr-1"></i> 2026.04.25</span>
+                <span><i class="fa-solid fa-wind text-[#76b900] mr-1"></i> WIND 4.2m/s</span>
+              </div>
+              <h3 class="text-lg font-bold text-white group-hover:text-[#76b900] transition duration-200 mb-2">
+                태안 몽산포 솔밭 해변 석양 출정
+              </h3>
+              <p class="text-neutral-400 text-xs leading-relaxed mb-4">
+                붉게 타오르는 서해의 낙조와 해송 방풍림 아래에서의 고밀도 휴식. 강풍 대응 펙다운 테크닉 리포트 수록.
+              </p>
+            </div>
+          </div>
+          <div class="px-6 pb-6 pt-3 border-t border-neutral-900 flex items-center justify-between text-xs">
+            <span class="text-neutral-500 font-mono text-[11px]">GEAR: 노르디스크 카리</span>
+            <button onclick="openLogModal(2)" class="text-[#76b900] hover:underline font-bold text-xs flex items-center gap-1.5">
+              <span>상세 리포트</span>
+              <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            </button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="gears" class="py-20 bg-neutral-950 border-b border-neutral-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest text-[#76b900] font-bold mb-2">
+          <i class="fa-solid fa-layer-group"></i> HARDWARE & GEAR ARCHITECTURE
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">검증된 캠핑 기어 아키텍처</h2>
+        <p class="text-neutral-400 text-xs sm:text-sm mt-2">김성남 포털이 실전 악천후와 사계절 테스트를 통해 확정한 핵심 장비 스펙</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <!-- Gear 1 -->
+        <div class="p-6 bg-black border border-neutral-800 nv-border-glow transition duration-300 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-[10px] font-mono text-[#76b900] uppercase tracking-wider font-bold">01 / SHELTER ARCH</span>
+              <i class="fa-solid fa-campground text-neutral-600 text-lg"></i>
+            </div>
+            <h3 class="text-base font-extrabold text-white mb-2">스노우피크 랜드락 Pro</h3>
+            <p class="text-xs text-neutral-400 leading-relaxed mb-4">
+              립스탑 원단과 두랄루민 A6061 프레임을 결합해 시속 50km 돌풍에서도 견고함을 유지하는 4계절 최강 리빙쉘.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-neutral-900 text-[11px] font-mono text-neutral-500 space-y-1">
+            <div class="flex justify-between"><span>NET WEIGHT:</span><span class="text-white">22.0 kg</span></div>
+            <div class="flex justify-between"><span>PERFORMANCE:</span><span class="text-[#76b900]">★★★★★ (9.9/10)</span></div>
+          </div>
+        </div>
+
+        <!-- Gear 2 -->
+        <div class="p-6 bg-black border border-neutral-800 nv-border-glow transition duration-300 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-[10px] font-mono text-[#76b900] uppercase tracking-wider font-bold">02 / THERMAL ENGINE</span>
+              <i class="fa-solid fa-fire text-neutral-600 text-lg"></i>
+            </div>
+            <h3 class="text-base font-extrabold text-white mb-2">솔로스토브 레인저 2.0</h3>
+            <p class="text-xs text-neutral-400 leading-relaxed mb-4">
+              특허받은 360도 2차 연소 에어플로우 시스템을 탑재하여 불필요한 매연 없이 극대화된 열효율과 불멍을 제공.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-neutral-900 text-[11px] font-mono text-neutral-500 space-y-1">
+            <div class="flex justify-between"><span>CHAMBER:</span><span class="text-white">304 Stainless</span></div>
+            <div class="flex justify-between"><span>PERFORMANCE:</span><span class="text-[#76b900]">★★★★★ (9.8/10)</span></div>
+          </div>
+        </div>
+
+        <!-- Gear 3 -->
+        <div class="p-6 bg-black border border-neutral-800 nv-border-glow transition duration-300 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-[10px] font-mono text-[#76b900] uppercase tracking-wider font-bold">03 / ULTRA MOBILITY</span>
+              <i class="fa-solid fa-chair text-neutral-600 text-lg"></i>
+            </div>
+            <h3 class="text-base font-extrabold text-white mb-2">헬리녹스 체어원 하이텍</h3>
+            <p class="text-xs text-neutral-400 leading-relaxed mb-4">
+              초경량 DAC 알루미늄 합금 폴대를 적용해 단 1.09kg으로 최대 145kg 하중을 완벽하게 지지하는 인체공학 체어.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-neutral-900 text-[11px] font-mono text-neutral-500 space-y-1">
+            <div class="flex justify-between"><span>MAX LOAD:</span><span class="text-white">145 kg</span></div>
+            <div class="flex justify-between"><span>PERFORMANCE:</span><span class="text-[#76b900]">★★★★★ (9.7/10)</span></div>
+          </div>
+        </div>
+
+        <!-- Gear 4 -->
+        <div class="p-6 bg-black border border-neutral-800 nv-border-glow transition duration-300 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-[10px] font-mono text-[#76b900] uppercase tracking-wider font-bold">04 / OPTIC AMBIENT</span>
+              <i class="fa-solid fa-lightbulb text-neutral-600 text-lg"></i>
+            </div>
+            <h3 class="text-base font-extrabold text-white mb-2">골제로 라이트하우스 마이크로</h3>
+            <p class="text-xs text-neutral-400 leading-relaxed mb-4">
+              최대 150시간 런타임과 IPX6 방수 등급을 갖춘 고밀도 리튬 이온 아웃도어 포터블 랜턴 시스템.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-neutral-900 text-[11px] font-mono text-neutral-500 space-y-1">
+            <div class="flex justify-between"><span>LUMENS:</span><span class="text-white">150 lm max</span></div>
+            <div class="flex justify-between"><span>PERFORMANCE:</span><span class="text-[#76b900]">★★★★★ (9.9/10)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="checklist" class="py-20 bg-black border-b border-neutral-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <!-- Control Panel Stats -->
+        <div class="lg:col-span-5">
+          <div class="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest text-[#76b900] font-bold mb-2">
+            <i class="fa-solid fa-microchip"></i> EXPEDITION SYSTEM CHECK
+          </div>
+          <h2 class="text-3xl font-extrabold text-white tracking-tight">스마트 패킹 체크리스트</h2>
+          <p class="text-neutral-400 text-xs sm:text-sm mt-3 leading-relaxed">
+            출정 전 단 하나의 장비도 누락되지 않도록 체크하세요. 브라우저 로컬 저장소에 실시간 캐시되며, 현장 맞춤형 장비를 즉시 추가할 수 있습니다.
+          </p>
+
+          <!-- Status Gauge Card -->
+          <div class="mt-8 p-6 bg-neutral-950 border border-neutral-800">
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-xs font-mono text-neutral-300 font-bold uppercase tracking-wider">PACKING READY GAUGE</span>
+              <span id="pack-percent" class="text-base font-black font-mono text-[#76b900]">0%</span>
+            </div>
+            <!-- NVIDIA Lime Green Progress Bar -->
+            <div class="w-full bg-neutral-900 h-2 overflow-hidden border border-neutral-800">
+              <div id="pack-progress-bar" class="bg-[#76b900] h-2 transition-all duration-300 nv-glow-sm" style="width: 0%"></div>
+            </div>
+            <p id="pack-status-text" class="text-[11px] font-mono text-neutral-400 mt-4 flex items-center gap-2">
+              <i class="fa-solid fa-circle-notch fa-spin text-[#76b900]"></i> 팩킹 상태 진단 대기 중
+            </p>
+
+            <div class="flex items-center gap-4 mt-6 pt-4 border-t border-neutral-900 text-xs font-mono">
+              <button id="reset-checklist-btn" class="text-neutral-500 hover:text-white transition">
+                [RESET ALL]
+              </button>
+              <span class="text-neutral-700">|</span>
+              <button id="check-all-btn" class="text-[#76b900] hover:underline font-bold">
+                [COMPLETE ALL]
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Checklist Table & Actions -->
+        <div class="lg:col-span-7 bg-neutral-950 p-6 border border-neutral-800">
+          <!-- Add Form -->
+          <form id="add-item-form" class="flex gap-2 mb-6">
+            <input type="text" id="new-item-input" placeholder="새로운 체크포인트 아이템 입력 (예: 일산화탄소 경보기, 방염 장갑)" 
+              class="flex-1 bg-black border border-neutral-800 px-4 py-3 text-xs text-white placeholder-neutral-600 focus:outline-none focus:border-[#76b900] font-sans">
+            <button type="submit" class="px-5 py-3 bg-[#76b900] hover:bg-[#88d400] text-black font-extrabold text-xs tracking-wider uppercase transition active:scale-95 shrink-0 flex items-center gap-1.5">
+              <i class="fa-solid fa-plus"></i> 추가
+            </button>
+          </form>
+
+          <!-- Category Navigation -->
+          <div class="flex gap-1.5 overflow-x-auto pb-3 mb-4 text-xs font-mono" id="checklist-category-nav">
+            <button class="cl-tab active px-3.5 py-1.5 bg-[#76b900] text-black font-bold uppercase tracking-wider shrink-0" data-cat="all">ALL</button>
+            <button class="cl-tab px-3.5 py-1.5 bg-neutral-900 text-neutral-400 hover:text-white uppercase tracking-wider shrink-0" data-cat="shelter">SHELTER</button>
+            <button class="cl-tab px-3.5 py-1.5 bg-neutral-900 text-neutral-400 hover:text-white uppercase tracking-wider shrink-0" data-cat="cook">KITCHEN</button>
+            <button class="cl-tab px-3.5 py-1.5 bg-neutral-900 text-neutral-400 hover:text-white uppercase tracking-wider shrink-0" data-cat="etc">SAFETY & UTILITY</button>
+          </div>
+
+          <!-- Items Scroll Area -->
+          <div id="checklist-items" class="space-y-2 max-h-[380px] overflow-y-auto pr-1 font-mono text-xs">
+            <!-- Dynamic items populated by script -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="recipes" class="py-20 bg-neutral-950 border-b border-neutral-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <div class="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest text-[#76b900] font-bold mb-2">
+          <i class="fa-solid fa-utensils"></i> HEALING CULINARY
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">김성남 추천 필드 레시피</h2>
+        <p class="text-neutral-400 text-xs sm:text-sm mt-2">자연의 신선한 공기와 모닥불 훈연이 빚어내는 최고의 미식</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Recipe 1 -->
+        <div class="bg-black border border-neutral-800 p-6 flex flex-col justify-between nv-border-glow transition duration-300">
+          <div>
+            <div class="flex items-center justify-between text-[11px] font-mono text-[#76b900] mb-3">
+              <span>LEVEL: BEGINNER</span>
+              <span><i class="fa-regular fa-clock"></i> 20 MIN</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">엑스트라버진 감바스 알 아히요</h3>
+            <p class="text-neutral-400 text-xs leading-relaxed mb-4">
+              주철 스킬렛에 고품질 올리브유와 편마늘, 통새우, 로즈마리를 넣고 은은한 직화로 끓여내는 캠핑 대표 와인 페어링 요리.
+            </p>
+            <div class="bg-neutral-950 p-3 border border-neutral-900 text-[11px] text-neutral-300 font-mono space-y-1 mb-4">
+              <div>• 통새우 15미, 마늘 10쪽, 페페론치노</div>
+              <div>• 바게트 빵 4조각, 엑스트라버진 올리브유</div>
+            </div>
+          </div>
+          <span class="text-[10px] font-mono text-neutral-500">PRO TIP: 마늘이 타지 않도록 불꽃 중심에서 살짝 벗어나 가열하세요.</span>
+        </div>
+
+        <!-- Recipe 2 -->
+        <div class="bg-black border border-neutral-800 p-6 flex flex-col justify-between nv-border-glow transition duration-300">
+          <div>
+            <div class="flex items-center justify-between text-[11px] font-mono text-[#76b900] mb-3">
+              <span>LEVEL: ADVANCED</span>
+              <span><i class="fa-regular fa-clock"></i> 45 MIN</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">참나무 훈연 통삼겹 바비큐</h3>
+            <p class="text-neutral-400 text-xs leading-relaxed mb-4">
+              참나무 장작의 훈연향을 고기 속까지 침투시켜 겉은 바삭하고 속은 촉촉한 육즙을 가두는 화로대 간접열 구이.
+            </p>
+            <div class="bg-neutral-950 p-3 border border-neutral-900 text-[11px] text-neutral-300 font-mono space-y-1 mb-4">
+              <div>• 두툼한 통삼겹 800g, 몬트리올 시즈닝</div>
+              <div>• 참나무 훈연칩, 두꺼운 알루미늄 호일</div>
+            </div>
+          </div>
+          <span class="text-[10px] font-mono text-neutral-500">PRO TIP: 숯불을 화로대 한쪽에만 배치하는 투존(Two-Zone) 방식을 권장합니다.</span>
+        </div>
+
+        <!-- Recipe 3 -->
+        <div class="bg-black border border-neutral-800 p-6 flex flex-col justify-between nv-border-glow transition duration-300">
+          <div>
+            <div class="flex items-center justify-between text-[11px] font-mono text-[#76b900] mb-3">
+              <span>LEVEL: RELAXING</span>
+              <span><i class="fa-regular fa-clock"></i> 10 MIN</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">에티오피아 핸드드립 & 스모어</h3>
+            <p class="text-neutral-400 text-xs leading-relaxed mb-4">
+              아침 물안개를 바라보며 손수 내리는 싱글 오리진 드립 커피와 모닥불 잔열로 구워낸 달콤한 스모어의 하모니.
+            </p>
+            <div class="bg-neutral-950 p-3 border border-neutral-900 text-[11px] text-neutral-300 font-mono space-y-1 mb-4">
+              <div>• 갓 볶은 원두 20g, 핸드밀, 드립서버</div>
+              <div>• 점보 마시멜로우, 다크 초콜릿, 다이제</div>
+            </div>
+          </div>
+          <span class="text-[10px] font-mono text-neutral-500">PRO TIP: 온수 온도를 92도로 맞추면 산미와 향미의 균형이 가장 뛰어납니다.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="guestbook" class="py-20 bg-black border-b border-neutral-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest text-[#76b900] font-bold mb-2">
+          <i class="fa-solid fa-comments"></i> COMMUNITY & LOG NOTE
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">포털 힐링 방명록</h2>
+        <p class="text-neutral-400 text-xs sm:text-sm mt-2">김성남 포털을 찾은 동료 캠퍼분들의 방문 소감과 아웃도어 노하우를 나눠주세요.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Form -->
+        <div class="lg:col-span-4 bg-neutral-950 p-6 border border-neutral-800">
+          <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider font-mono flex items-center gap-2">
+            <i class="fa-solid fa-pen-to-square text-[#76b900]"></i> LOG ENTRY
+          </h3>
+          <form id="guestbook-form" class="space-y-4">
+            <div>
+              <label class="block text-[11px] font-mono text-neutral-400 mb-1">CALLSIGN / 닉네임</label>
+              <input type="text" id="gb-author" required placeholder="예: 솔캠탐험가"
+                class="w-full bg-black border border-neutral-800 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#76b900] font-sans">
+            </div>
+            <div>
+              <label class="block text-[11px] font-mono text-neutral-400 mb-1">ICON IDENTIFIER</label>
+              <div class="grid grid-cols-4 gap-2" id="icon-selector">
+                <label class="cursor-pointer">
+                  <input type="radio" name="gb-icon" value="fa-mountain" checked class="hidden peer">
+                  <div class="py-2 text-center border border-neutral-800 peer-checked:border-[#76b900] peer-checked:bg-[#76b900]/10 peer-checked:text-[#76b900] text-neutral-400 hover:text-white transition">
+                    <i class="fa-solid fa-mountain"></i>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="gb-icon" value="fa-fire" class="hidden peer">
+                  <div class="py-2 text-center border border-neutral-800 peer-checked:border-[#76b900] peer-checked:bg-[#76b900]/10 peer-checked:text-[#76b900] text-neutral-400 hover:text-white transition">
+                    <i class="fa-solid fa-fire"></i>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="gb-icon" value="fa-compass" class="hidden peer">
+                  <div class="py-2 text-center border border-neutral-800 peer-checked:border-[#76b900] peer-checked:bg-[#76b900]/10 peer-checked:text-[#76b900] text-neutral-400 hover:text-white transition">
+                    <i class="fa-solid fa-compass"></i>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="gb-icon" value="fa-campground" class="hidden peer">
+                  <div class="py-2 text-center border border-neutral-800 peer-checked:border-[#76b900] peer-checked:bg-[#76b900]/10 peer-checked:text-[#76b900] text-neutral-400 hover:text-white transition">
+                    <i class="fa-solid fa-campground"></i>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <div>
+              <label class="block text-[11px] font-mono text-neutral-400 mb-1">MESSAGE TRANSMISSION</label>
+              <textarea id="gb-content" rows="3" required placeholder="포털 디자인과 캠핑 데이터가 너무 멋집니다! 안전한 캠핑 되세요."
+                class="w-full bg-black border border-neutral-800 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#76b900] font-sans"></textarea>
+            </div>
+            <button type="submit" class="w-full py-3 bg-[#76b900] hover:bg-[#88d400] text-black font-extrabold text-xs uppercase tracking-wider transition active:scale-95 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> 방명록 전송
+            </button>
+          </form>
+        </div>
+
+        <!-- List -->
+        <div class="lg:col-span-8">
+          <div id="guestbook-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto pr-1 font-sans">
+            <!-- Dynamic Notes -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="log-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+    <div class="bg-neutral-950 border border-neutral-800 w-full max-w-xl overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300" id="modal-container">
+      <div class="p-6 border-b border-neutral-800 flex justify-between items-center bg-black">
+        <div>
+          <span id="modal-badge" class="px-2 py-0.5 bg-[#76b900] text-black font-mono text-[10px] font-black uppercase tracking-wider">EXPEDITION</span>
+          <h3 id="modal-title" class="text-xl font-bold text-white mt-2">일지 세부 정보</h3>
+        </div>
+        <button onclick="closeLogModal()" class="w-8 h-8 bg-neutral-900 hover:bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center border border-neutral-800">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div class="flex items-center gap-5 text-xs font-mono text-neutral-400">
+          <span id="modal-date"><i class="fa-regular fa-calendar text-[#76b900] mr-1"></i> 날짜</span>
+          <span id="modal-weather"><i class="fa-solid fa-cloud-sun text-[#76b900] mr-1"></i> 환경</span>
+        </div>
+        <p id="modal-desc" class="text-neutral-300 text-xs sm:text-sm leading-relaxed"></p>
+        
+        <div class="p-4 bg-black border border-neutral-800 space-y-2 text-xs">
+          <div class="font-mono font-bold text-[#76b900] flex items-center gap-1.5">
+            <i class="fa-solid fa-terminal"></i> SEONGNAM'S FIELD TELEMETRY NOTE
+          </div>
+          <p id="modal-note" class="text-neutral-400 leading-normal font-sans"></p>
+        </div>
+      </div>
+      <div class="p-4 border-t border-neutral-800 bg-black flex justify-end">
+        <button onclick="closeLogModal()" class="px-5 py-2 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-white text-xs font-semibold uppercase">
+          창 닫기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-black border-t border-neutral-900 py-12 text-neutral-500 text-xs font-mono">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-7 h-7 bg-[#76b900] flex items-center justify-center text-black font-black">
+          <i class="fa-solid fa-mountain-sun text-sm"></i>
+        </div>
+        <span class="font-bold text-white text-sm tracking-tight font-sans">김성남힐링캠핑포털</span>
+      </div>
+
+      <p class="text-center md:text-left text-neutral-600 text-[11px] font-sans">
+        LEAVE NO TRACE. 자연 보호 및 지속 가능한 오토캠핑 문화를 지지합니다. &copy; 2026 Kim Seong-nam Healing Camping Portal. All Rights Reserved.
+      </p>
+
+      <div class="flex items-center gap-4 text-neutral-400">
+        <a href="#" class="hover:text-[#76b900] transition" title="INSTAGRAM"><i class="fa-brands fa-instagram text-base"></i></a>
+        <a href="#" class="hover:text-[#76b900] transition" title="YOUTUBE"><i class="fa-brands fa-youtube text-base"></i></a>
+        <a href="#" class="hover:text-[#76b900] transition" title="GITHUB"><i class="fa-brands fa-github text-base"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ========================================================
+     * 1. NVIDIA Matrix Lime Particle Canvas
+     * ======================================================== */
+    const canvas = document.getElementById('nv-matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const particleCount = 48;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class TechParticle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.alpha = Math.random() * 0.7 + 0.2;
+        this.glowSpeed = (Math.random() * 0.02) + 0.008;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.alpha += this.glowSpeed;
+
+        if (this.alpha > 0.95 || this.alpha < 0.15) {
+          this.glowSpeed = -this.glowSpeed;
+        }
+        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+          this.reset();
+        }
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(118, 185, 0, ${Math.max(0, this.alpha)})`;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#76b900';
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new TechParticle());
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Connect nearby particles with subtle lines for tech feel
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 100) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(118, 185, 0, ${0.15 * (1 - dist / 100)})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    /* ========================================================
+     * 2. Synthesized Campfire Audio (Web Audio API)
+     * ======================================================== */
+    let audioCtx = null;
+    let isPlayingAudio = false;
+    let noiseNode = null;
+    let crackleInterval = null;
+
+    const soundBtn = document.getElementById('ambient-sound-btn');
+    const soundIcon = document.getElementById('sound-icon');
+    const soundText = document.getElementById('sound-text');
+
+    function createCampfireAudio() {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContext();
+
+      const bufferSize = audioCtx.sampleRate * 2;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99 * b0 + white * 0.05;
+        b1 = 0.95 * b1 + white * 0.05;
+        b2 = 0.85 * b2 + white * 0.1;
+        data[i] = (b0 + b1 + b2) * 0.08;
+      }
+
+      noiseNode = audioCtx.createBufferSource();
+      noiseNode.buffer = buffer;
+      noiseNode.loop = true;
+
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 400;
+
+      const gain = audioCtx.createGain();
+      gain.gain.value = 0.15;
+
+      noiseNode.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+      noiseNode.start();
+
+      crackleInterval = setInterval(() => {
+        if (!isPlayingAudio || !audioCtx) return;
+        if (Math.random() < 0.6) {
+          const osc = audioCtx.createOscillator();
+          const snapGain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(320 + Math.random() * 800, audioCtx.currentTime);
+          snapGain.gain.setValueAtTime(0.08 + Math.random() * 0.05, audioCtx.currentTime);
+          snapGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.04);
+          osc.connect(snapGain);
+          snapGain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.05);
+        }
+      }, 120);
+    }
+
+    soundBtn.addEventListener('click', () => {
+      if (!isPlayingAudio) {
+        if (!audioCtx) {
+          createCampfireAudio();
+        } else if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        isPlayingAudio = true;
+        soundIcon.className = 'fa-solid fa-volume-high text-[#76b900]';
+        soundText.textContent = 'ASMR ACTIVE';
+        soundBtn.classList.add('border-[#76b900]');
+        showToast('🔥 모닥불 사운드 엔진이 활성화되었습니다.');
+      } else {
+        if (audioCtx) {
+          audioCtx.suspend();
+        }
+        isPlayingAudio = false;
+        soundIcon.className = 'fa-solid fa-volume-xmark text-neutral-400';
+        soundText.textContent = 'ASMR OFF';
+        soundBtn.classList.remove('border-[#76b900]');
+        showToast('모닥불 사운드가 일시 정지되었습니다.');
+      }
+    });
+
+    /* ========================================================
+     * 3. Toast Notifications & Mobile Navigation
+     * ======================================================== */
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-message');
+      toastMsg.textContent = msg;
+      toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+      }, 2600);
+    }
+
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      mobileMenu.classList.toggle('flex');
+    });
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.classList.remove('flex');
+      });
+    });
+
+    /* ========================================================
+     * 4. Smart Packing Checklist Logic
+     * ======================================================== */
+    const defaultChecklist = [
+      { id: 1, text: '스노우피크 랜드락 텐트 & 그라운드시트', cat: 'shelter', done: true },
+      { id: 2, text: '단조 펙 30cm & 스트링 텐셔너', cat: 'shelter', done: true },
+      { id: 3, text: '황동 펙 해머 & 여분 카라비너', cat: 'shelter', done: false },
+      { id: 4, text: '자충 에어매트 & 구스다운 침낭', cat: 'shelter', done: true },
+      { id: 5, text: '솔로스토브 화로대 & 고열 방염포', cat: 'cook', done: false },
+      { id: 6, text: '건조 참나무 장작 10kg & 토치', cat: 'cook', done: false },
+      { id: 7, text: '주철 그리들 & 티타늄 시에라 컵', cat: 'cook', done: false },
+      { id: 8, text: '골제로 랜턴 & 고용량 파워뱅크', cat: 'etc', done: true },
+      { id: 9, text: '휴대용 일산화탄소 경보기 & 구급 키트', cat: 'etc', done: true },
+      { id: 10, text: '종량제 환경 쓰레기봉투 20L', cat: 'etc', done: false },
+    ];
+
+    let checkList = JSON.parse(localStorage.getItem('ksn_camping_pack_items')) || defaultChecklist;
+    let currentFilterCat = 'all';
+
+    function saveAndRenderChecklist() {
+      localStorage.setItem('ksn_camping_pack_items', JSON.stringify(checkList));
+      renderChecklist();
+      updateChecklistProgress();
+    }
+
+    function renderChecklist() {
+      const container = document.getElementById('checklist-items');
+      container.innerHTML = '';
+
+      const filtered = checkList.filter(item => {
+        if (currentFilterCat === 'all') return true;
+        return item.cat === currentFilterCat;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="text-neutral-600 text-xs py-8 text-center font-mono">[NO ITEMS MATCHING QUERY]</div>`;
+        return;
+      }
+
+      filtered.forEach(item => {
+        const itemRow = document.createElement('div');
+        itemRow.className = `flex items-center justify-between p-3 border transition duration-200 ${
+          item.done ? 'bg-black/40 border-neutral-900 text-neutral-600 line-through' : 'bg-black border-neutral-800 text-neutral-200 hover:border-neutral-700'
+        }`;
+
+        itemRow.innerHTML = `
+          <label class="flex items-center gap-3 cursor-pointer flex-1 select-none">
+            <input type="checkbox" ${item.done ? 'checked' : ''} class="w-4 h-4 rounded-none accent-[#76b900] bg-neutral-900 border-neutral-700 focus:ring-0">
+            <span class="text-xs font-mono ${item.done ? 'line-through text-neutral-600' : ''}">${item.text}</span>
+          </label>
+          <button class="delete-item-btn text-neutral-600 hover:text-red-400 p-1.5 transition" title="삭제">
+            <i class="fa-regular fa-trash-can text-xs"></i>
+          </button>
+        `;
+
+        const chkBox = itemRow.querySelector('input');
+        chkBox.addEventListener('change', () => {
+          item.done = chkBox.checked;
+          saveAndRenderChecklist();
+        });
+
+        const delBtn = itemRow.querySelector('.delete-item-btn');
+        delBtn.addEventListener('click', () => {
+          checkList = checkList.filter(t => t.id !== item.id);
+          saveAndRenderChecklist();
+          showToast('항목이 삭제되었습니다.');
+        });
+
+        container.appendChild(itemRow);
+      });
+    }
+
+    function updateChecklistProgress() {
+      if (checkList.length === 0) {
+        document.getElementById('pack-percent').textContent = '0%';
+        document.getElementById('pack-progress-bar').style.width = '0%';
+        return;
+      }
+      const doneCount = checkList.filter(i => i.done).length;
+      const pct = Math.round((doneCount / checkList.length) * 100);
+      document.getElementById('pack-percent').textContent = `${pct}%`;
+      document.getElementById('pack-progress-bar').style.width = `${pct}%`;
+
+      const statusText = document.getElementById('pack-status-text');
+      if (pct === 100) {
+        statusText.innerHTML = '<i class="fa-solid fa-circle-check text-[#76b900]"></i> 100% READY: 완벽한 패킹 구성이 완료되었습니다. 출발 가능!';
+      } else {
+        statusText.innerHTML = `<i class="fa-solid fa-clock text-[#76b900]"></i> IN PROGRESS: 미완료 체크포인트 ${checkList.length - doneCount}건 남음`;
+      }
+    }
+
+    document.getElementById('add-item-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('new-item-input');
+      const val = input.value.trim();
+      if (!val) return;
+
+      checkList.unshift({
+        id: Date.now(),
+        text: val,
+        cat: currentFilterCat === 'all' ? 'etc' : currentFilterCat,
+        done: false
+      });
+      input.value = '';
+      saveAndRenderChecklist();
+      showToast(`'${val}' 항목이 추가되었습니다.`);
+    });
+
+    document.querySelectorAll('.cl-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.cl-tab').forEach(b => {
+          b.classList.remove('bg-[#76b900]', 'text-black', 'font-bold');
+          b.classList.add('bg-neutral-900', 'text-neutral-400');
+        });
+        btn.classList.add('bg-[#76b900]', 'text-black', 'font-bold');
+        btn.classList.remove('bg-neutral-900', 'text-neutral-400');
+        currentFilterCat = btn.getAttribute('data-cat');
+        renderChecklist();
+      });
+    });
+
+    document.getElementById('reset-checklist-btn').addEventListener('click', () => {
+      checkList.forEach(i => i.done = false);
+      saveAndRenderChecklist();
+      showToast('체크리스트가 초기화되었습니다.');
+    });
+
+    document.getElementById('check-all-btn').addEventListener('click', () => {
+      checkList.forEach(i => i.done = true);
+      saveAndRenderChecklist();
+      showToast('모든 팩킹 준비가 완료되었습니다! 🎉');
+    });
+
+    saveAndRenderChecklist();
+
+    /* ========================================================
+     * 5. Expedition Log Filters & Modal
+     * ======================================================== */
+    const logDetails = [
+      {
+        badge: 'FOREST DEEP',
+        title: '강원 정선 가리왕산 잣나무 숲 사이트',
+        date: '2026.09.18',
+        weather: 'MIN 11°C, 피톤치드 운무',
+        desc: '해발 750m 깊은 잣나무 군락지에서 2박 3일간 보낸 고요한 힐링. 스마트폰은 오프라인 모드로 두고 책과 커피 한 잔으로 온전한 리셋을 경험했습니다.',
+        note: '가리왕산 데크 14번 강력 추천. 데크 크기 5x7m 이상으로 대형 쉘터 설치 가능하며, 야간 급격한 기온 강하에 대비해 써멀 매트 필수입니다.'
+      },
+      {
+        badge: 'LAKESIDE VISTA',
+        title: '충주호 물멍 & 모닥불 힐링 존',
+        date: '2026.06.12',
+        weather: 'MIN 18°C, 청명한 호숫가 미풍',
+        desc: '광활하게 펼쳐진 호수를 조망하며 타오르는 모닥불과 함께한 밤. 주철 그리들에 구운 스테이크와 잔잔한 음악이 어우러진 완벽한 힐링 사이트입니다.',
+        note: '잔디 및 마사토 혼합 사이트로 최소 30cm 단조 펙이 필수적입니다. 날벌레 방지를 위해 시트로넬라 오일 랜턴을 권장합니다.'
+      },
+      {
+        badge: 'COASTAL SUNSET',
+        title: '태안 몽산포 솔밭 해변 석양 출정',
+        date: '2026.04.25',
+        weather: 'WIND 4.2m/s, 서해 황금빛 낙조',
+        desc: '해송 방풍림 사이로 붉게 물드는 석양을 직관하며 파도 소리에 젖어든 출정. 간조 시간에 맞춘 조개잡이와 해산물 바비큐가 일품입니다.',
+        note: '모래 지형 특성상 40cm 이상의 샌드 펙(Sand Peg) 및 크로스 펙다운 기술이 요구됩니다.'
+      }
+    ];
+
+    function openLogModal(idx) {
+      const data = logDetails[idx];
+      if (!data) return;
+
+      document.getElementById('modal-badge').textContent = data.badge;
+      document.getElementById('modal-title').textContent = data.title;
+      document.getElementById('modal-date').innerHTML = `<i class="fa-regular fa-calendar text-[#76b900] mr-1"></i> ${data.date}`;
+      document.getElementById('modal-weather').innerHTML = `<i class="fa-solid fa-cloud-sun text-[#76b900] mr-1"></i> ${data.weather}`;
+      document.getElementById('modal-desc').textContent = data.desc;
+      document.getElementById('modal-note').textContent = data.note;
+
+      const modal = document.getElementById('log-modal');
+      const container = document.getElementById('modal-container');
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        container.classList.remove('scale-95');
+      }, 10);
+    }
+
+    function closeLogModal() {
+      const modal = document.getElementById('log-modal');
+      const container = document.getElementById('modal-container');
+      modal.classList.add('opacity-0');
+      container.classList.add('scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 250);
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.remove('bg-[#76b900]', 'text-black', 'font-bold');
+          b.classList.add('text-neutral-400');
+        });
+        btn.classList.add('bg-[#76b900]', 'text-black', 'font-bold');
+        btn.classList.remove('text-neutral-400');
+
+        const filter = btn.getAttribute('data-filter');
+        document.querySelectorAll('.journal-card').forEach(card => {
+          if (filter === 'all' || card.getAttribute('data-category') === filter) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    /* ========================================================
+     * 6. Guestbook Logic
+     * ======================================================== */
+    const defaultGuestbook = [
+      { author: '테크캠퍼준', icon: 'fa-mountain', content: '김성남 힐링 캠핑 포털 분위기가 엔비디아처럼 너무 세련되고 멋집니다! 장비 스펙도 많은 도움이 되었어요.', time: '방금 전' },
+      { author: '아웃도어은지', icon: 'fa-compass', content: '가리왕산 잣나무 숲 후기 보고 이번 주말 바로 출정 예약 잡았습니다. 체크리스트 기능 최고!', time: '1일 전' },
+      { author: '솔로백패커', icon: 'fa-fire', content: '모닥불 ASMR 켜두고 일지 구경하니 텐트 안에 있는 착각이 드네요. 늘 안캠 즐캠 하세요!', time: '2일 전' }
+    ];
+
+    let guestbookData = JSON.parse(localStorage.getItem('ksn_camping_guestbook')) || defaultGuestbook;
+
+    function renderGuestbook() {
+      const container = document.getElementById('guestbook-list');
+      container.innerHTML = '';
+
+      guestbookData.forEach((note) => {
+        const card = document.createElement('div');
+        card.className = 'p-4 bg-neutral-950 border border-neutral-800 flex gap-3.5 items-start nv-border-glow transition';
+        card.innerHTML = `
+          <div class="w-9 h-9 bg-black border border-[#76b900] text-[#76b900] flex items-center justify-center shrink-0 text-sm">
+            <i class="fa-solid ${note.icon || 'fa-mountain'}"></i>
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-xs text-white">${escapeHtml(note.author)}</span>
+              <span class="text-[10px] font-mono text-neutral-500">${note.time || '방금 전'}</span>
+            </div>
+            <p class="text-xs text-neutral-400 mt-1 leading-relaxed">${escapeHtml(note.content)}</p>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function escapeHtml(string) {
+      return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    document.getElementById('guestbook-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const author = document.getElementById('gb-author').value.trim();
+      const content = document.getElementById('gb-content').value.trim();
+      const checkedIcon = document.querySelector('input[name="gb-icon"]:checked')?.value || 'fa-mountain';
+
+      if (!author || !content) return;
+
+      guestbookData.unshift({
+        author,
+        icon: checkedIcon,
+        content,
+        time: '방금 전'
+      });
+
+      localStorage.setItem('ksn_camping_guestbook', JSON.stringify(guestbookData));
+      renderGuestbook();
+
+      document.getElementById('gb-author').value = '';
+      document.getElementById('gb-content').value = '';
+      showToast('방명록 로그가 정상적으로 전송되었습니다.');
+    });
+
+    renderGuestbook();
+  </script>
+</body>
+</html>
